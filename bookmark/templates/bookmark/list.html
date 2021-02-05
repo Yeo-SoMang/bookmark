@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" href="{% static 'css/reset.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<section id="container">
+    <header id="header">
+        <div><img src="{% static 'img/bookmark.png' %}" alt="북마크아이콘"></div>
+
+<!--        <div><img src="{% static 'img/bookmark.png' %}" alt="북마크아이콘"></div>-->
+        <div>BOOK-MARK</div>
+    </header>
+
+    <section class="btn_container">
+        <button class="home active"><a href="{% url 'bookmark:list' %}" class="active home">HOME</a></button>
+        <button class="create"><a href="{% url 'bookmark:new' %}" class="create">CREATE</a></button>
+    </section>
+
+
+<!--        <div class="empty_area">-->
+<!--            <p>-->
+<!--                북마크 항목이 비어있습니다. <br>-->
+<!--                create를 눌러 새 북마크를 생성해보세요.-->
+<!--            </p>-->
+<!--        </div>-->
+    {% if list %}
+    <section id="over_container">
+        <div class="scroll_inner">
+
+            {% for bookmark_list in list %}
+            <article class="list01">
+                <span class="site_name">{{ bookmark_list.site_name }}</span>
+                <span class="line"></span>
+                <span class="site_url"><a href="#">{{ bookmark_list.url }}</a></span>
+
+                <div class="form_container">
+                    <a href="{% url 'bookmark:edit' bookmark_list.id %}">edit</a>
+                    <form action="{% url 'bookmark:delete' bookmark_list.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="delete">
+                    </form>
+                </div>
+            </article>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    {% else %}
+
+    <div>
+        <div class="empty_area">
+            <p>
+                북마크 항목이 비어있습니다.<br>
+                create를 눌러 새 북마크를 생성해 주세요.
+            </p>
+        </div>
+    </div>
+
+    {% endif %}
+
+</section>
+{% endblock %}
